@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -23,10 +25,13 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
         Paginator::useBootstrapFour();
-        \Schema::defaultStringLength(191);
+        Schema::defaultStringLength(191);
+        if(env('APP_ENV') !== 'local') {
+            $url->forceSchema('https');
+        }
         //
     }
 }
